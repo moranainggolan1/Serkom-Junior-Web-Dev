@@ -1,0 +1,17 @@
+.home-image{
+    width: 400px;
+    height: 275px;
+    object-fit: cover;
+}
+
+.tentang-image{
+    width: 500px;
+    height: 350px;
+    object-fit: cover;
+}
+
+.map-image{
+    width: 800px;
+    height: 250px;
+    object-fit: cover;
+}
