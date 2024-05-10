@@ -1,16 +1,20 @@
 <?php
 require_once 'connection.php';
+//kalau tidak ada param id, kembalikan ke pesan-kamar
 if (!isset($_GET['id'])) {
     header("Location: pesan-kamar.php");
     exit();
 }
+//ambil detail dari order dengan data hotelnya
 $sql = "SELECT orders.*, hotel.tipe, hotel.harga FROM orders LEFT JOIN hotel ON hotel.id = orders.hotel_id WHERE orders.id = " . $_GET['id'];
 $result = mysqli_query($conn, $sql);
 $data = mysqli_fetch_array($result);
+//kalau order dengan id param tidak ditemukan, kembalikan ke pesan-kamar
 if ($data == null) {
     header("Location: pesan-kamar.php");
     exit();
 }
+//persenan diskon
 $discount = $data['durasi'] >= 3 ? 10 : 0;
 ?>
 <!DOCTYPE html>

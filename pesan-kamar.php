@@ -37,7 +37,9 @@ require_once 'connection.php';
                     <div class="card-body px-5">
                         <h2 class="fw-semibold text-center mb-5">FORM PEMESANAN</h2>
                         <?php
+                        //kalau menekan tombol submit
                         if (isset($_POST["submit"])) :
+                            //simpan ke database order
                             $sql = "INSERT INTO orders VALUES (
 											null,
                                             '" . $_POST["nama"] . "',
@@ -48,9 +50,12 @@ require_once 'connection.php';
                                             '" . $_POST["durasi_menginap"] . "',
 											" . ($_POST["breakfast"] ?? 0) . ")";
                             if (mysqli_query($conn, $sql)) :
+                                //kalau berhasil, pergi ke hasil-pesan-kamar
                                 $last_insert_id = mysqli_insert_id($conn);
                                 header("Location: hasil-pesan-kamar.php?id=$last_insert_id");
-                            else : ?>
+                            else : 
+                                //kalau gagal, tampilkan pesan gagal
+                            ?>
                                 <div class="alert alert-danger" role="alert">
                                     Gagal memesan kamar
                                 </div>

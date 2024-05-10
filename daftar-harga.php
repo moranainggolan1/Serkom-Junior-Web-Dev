@@ -11,6 +11,7 @@ require_once 'connection.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="styles.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class=" bg-light">
@@ -52,12 +53,60 @@ require_once 'connection.php';
                                 <td><?= $data['tipe'] ?></td>
                                 <td>Rp. <?= number_format($data['harga'], 2, '.', '.') ?>,-</td>
                                 <td>
-                                    <a href="detail-produk.php?id=<?=$data['id']?>" class="btn btn-primary">Detail</a>
+                                    <a href="detail-produk.php?id=<?= $data['id'] ?>" class="btn btn-primary">Detail</a>
                                 </td>
                             </tr>
                         <?php endwhile ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2 class="fw-semibold text-center mb-4">TOTAL PENJUALAN</h2>
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-4">
+                        <canvas id="total_penjualan"></canvas>
+                        <script>
+                            // mengambil total order setiap tipe hotel
+                            <?php
+                            $sql = "SELECT hotel.tipe, COUNT(orders.id) as jumlah_pesanan FROM orders RIGHT JOIN hotel ON hotel.id = orders.hotel_id GROUP BY hotel.id";
+                            $result = mysqli_query($conn, $sql);
+                            $labels = [];
+                            $dataTotal = [];
+                            while ($data = mysqli_fetch_array($result)){
+                                $labels[] = $data['tipe'];
+                                $dataTotal[] = $data['jumlah_pesanan'];
+                            }?>
+
+                            //memasang data ke chartjs untuk menampilkan piechart
+                            var ctx = document.getElementById('total_penjualan').getContext('2d');
+                            var data = {
+                                labels: <?=json_encode($labels)?>,
+                                datasets: [{
+                                    label: 'Total Penjualan',
+                                    backgroundColor: [
+                                        'red',
+                                        'blue',
+                                        'yellow',
+                                        'green',
+                                        'purple',
+                                        'orange'
+                                    ],
+                                    data: <?=json_encode($dataTotal)?>
+                                }]
+                            };
+                            var myPieChart = new Chart(ctx, {
+                                type: 'pie',
+                                data: data,
+                            });
+                        </script>
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+
             </div>
         </div>
     </div>

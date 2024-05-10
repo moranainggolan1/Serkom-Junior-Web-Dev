@@ -31,6 +31,7 @@ require_once 'connection.php';
     </nav>
     <div class="container-fluid mt-4 bg-light px-5">
         <?php
+        //ambil seluruh data hotel dan menampilkannya
         $sql = "SELECT * FROM hotel";
         $result = mysqli_query($conn, $sql);
         while ($data = mysqli_fetch_array($result)) : ?>

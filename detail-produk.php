@@ -1,12 +1,15 @@
 <?php
 require_once 'connection.php';
+//kalau tidak ada param id, kembalikan ke index
 if (!isset($_GET['id'])) {
     header("Location: index.php");
     exit();
 }
+//ambil hotel berdasar id
 $sql = "SELECT * FROM hotel WHERE id = " . $_GET['id'];
 $result = mysqli_query($conn, $sql);
 $data = mysqli_fetch_array($result);
+//kalau hotel dengan id param tidak ditemukan, kembalikan ke index
 if ($data == null) {
     header("Location: index.php");
     exit();
